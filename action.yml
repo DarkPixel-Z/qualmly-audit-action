@@ -11,7 +11,7 @@ inputs:
     description: 'Anthropic API key. Set this as a repo secret (e.g. ANTHROPIC_API_KEY) and reference here.'
     required: true
   github_token:
-    description: 'GitHub token with pull-requests: write permission. Use ${{ secrets.GITHUB_TOKEN }}.'
+    description: 'GitHub token with pull-requests:write permission. In your workflow, pass secrets.GITHUB_TOKEN.'
     required: true
   fail_on:
     description: 'Severity threshold that fails the action. One of: critical, warn, info, never. Default: critical.'
