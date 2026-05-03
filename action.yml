@@ -1,0 +1,55 @@
+name: 'Qualmly Audit'
+description: 'Run a Qualmly code review on changed files in a pull request and post findings as a PR comment.'
+author: 'DarkPixel Consulting Inc.'
+
+branding:
+  icon: 'shield'
+  color: 'green'
+
+inputs:
+  anthropic_api_key:
+    description: 'Anthropic API key. Set this as a repo secret (e.g. ANTHROPIC_API_KEY) and reference here.'
+    required: true
+  github_token:
+    description: 'GitHub token with pull-requests: write permission. Use ${{ secrets.GITHUB_TOKEN }}.'
+    required: true
+  fail_on:
+    description: 'Severity threshold that fails the action. One of: critical, warn, info, never. Default: critical.'
+    required: false
+    default: 'critical'
+  max_files:
+    description: 'Maximum number of changed files to scan in one run. Larger PRs are split. Default: 12.'
+    required: false
+    default: '12'
+  max_kb_per_file:
+    description: 'Skip files larger than this many KB. Default: 60.'
+    required: false
+    default: '60'
+  builder:
+    description: 'AI builder used to write the code (lovable | bolt | v0 | cursor | copilot | claude-code | windsurf | replit | webflow). Drives the per-finding "Paste this back into X" prompt. Default: cursor.'
+    required: false
+    default: 'cursor'
+  model:
+    description: 'Anthropic model to use. Default: claude-sonnet-4-6.'
+    required: false
+    default: 'claude-sonnet-4-6'
+  comment_mode:
+    description: 'How to post findings. One of: pr-comment (one consolidated comment), pr-review (line-anchored review comments), summary (workflow summary only, no PR comment). Default: pr-comment.'
+    required: false
+    default: 'pr-comment'
+
+outputs:
+  score:
+    description: 'Overall quality score (0-100) of the changes scanned.'
+  critical_count:
+    description: 'Number of critical findings.'
+  warn_count:
+    description: 'Number of warning findings.'
+  info_count:
+    description: 'Number of info findings.'
+  cost_usd:
+    description: 'Estimated Anthropic API spend for this run, in USD.'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

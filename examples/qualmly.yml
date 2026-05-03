@@ -1,0 +1,24 @@
+# Example workflow — copy this into your repo at .github/workflows/qualmly.yml
+name: Qualmly Audit
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: DarkPixel-Z/qualmly-audit-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          builder: cursor          # change to your AI builder of choice
+          fail_on: critical        # only block merges on critical findings
+          max_files: 12
+          max_kb_per_file: 60
